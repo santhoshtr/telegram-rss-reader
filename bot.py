@@ -84,6 +84,7 @@ def fetch_feeds(context: CallbackContext):
         logger.info(msg="Found " + str(len(feeds)) +
                     " feeds from " + source["url"])
         entry_index = 0
+        last_post_updated_time= 0
         for entry in feeds:
             if entry_index > 10:
                 break
@@ -97,13 +98,15 @@ def fetch_feeds(context: CallbackContext):
                 logger.error(msg=source["url"] + " has no time info")
                 break
             last_updated_time = int(source["last_updated"])
+            if post_updated_time > last_post_updated_time:
+                last_post_updated_time = post_updated_time
             if post_updated_time > last_updated_time:
                 context.bot.send_message(chat_id=source["userId"],
                                          text=format_feed_item(entry),
                                          parse_mode=ParseMode.HTML)
             entry_index = entry_index+1
 
-        update_source_timestamp(source["userId"], source["url"])
+        update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
 
 
 def main():

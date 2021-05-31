@@ -64,11 +64,10 @@ def get_all_sources():
     return results
 
 
-def update_source_timestamp(userId, source):
+def update_source_timestamp(userId, source, time):
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
-    dt_date = int(time.strftime("%Y%m%d%H%M%S"))
     cur.execute("UPDATE sources SET last_updated=:dt_date WHERE URL=:source AND USERID=:userid", {
-                "userid": userId, "source": source, "dt_date": dt_date})
+                "userid": userId, "source": source, "dt_date": time})
     con.commit()
     con.close()
