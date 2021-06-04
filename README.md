@@ -11,7 +11,7 @@ Create a bot account with telegram
 
 Use the @botfather bot of telegram. Refer its [documentation](https://core.telegram.org/bots).
 
-Create an sql database with the following script
+Create an sqlite database with the following script
 ------------------------------------------------
 
 ```sql
