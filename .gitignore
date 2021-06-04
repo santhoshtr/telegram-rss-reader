@@ -1,0 +1,6 @@
+.env
+*.db
+.vscode
+ENV_DIR
+*.sqbpro
+__pycache__

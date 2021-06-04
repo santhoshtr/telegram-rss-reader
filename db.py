@@ -1,7 +1,10 @@
 import sqlite3
 import time
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-DATABASE = 'reader.db'
+DATABASE = os.getenv('FEED_DATABASE')
 
 
 def add_feed_source(userId, source):
@@ -71,3 +74,4 @@ def update_source_timestamp(userId, source, time):
                 "userid": userId, "source": source, "dt_date": time})
     con.commit()
     con.close()
+

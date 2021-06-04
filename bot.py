@@ -1,18 +1,21 @@
-from db import add_feed_source, is_already_present, remove_feed_source, get_sources, get_all_sources, update_source_timestamp
-from feed import read_feed, format_feed_item, get_feed_info
-from telegram import Update, ParseMode
-from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters
 import logging
 import time
+import os
+
+from dotenv import load_dotenv
+from telegram import ParseMode, Update
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, Updater)
+
+from db import (add_feed_source, get_all_sources, get_sources,
+                is_already_present, remove_feed_source,
+                update_source_timestamp)
+from feed import format_feed_item, get_feed_info, read_feed
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-
-TOKEN = '1803099168:AAGjZRRKKl7PFJj5lIbr6LZoq8zH3TLHxrI'
-
-FEED_UPDATE_INTERVAL = 30*60  # 30 minutes
-
 
 def add_feed(update: Update, context: CallbackContext) -> None:
     user = update.effective_chat.id
@@ -110,7 +113,8 @@ def fetch_feeds(context: CallbackContext):
 
 
 def main():
-    updater = Updater(TOKEN)
+    load_dotenv()  # take environment variables from .env.
+    updater = Updater(os.getenv('TELEGRAM_BOT_TOKEN'))
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler('hello', hello))
@@ -125,7 +129,7 @@ def main():
 
     job_queue = updater.job_queue
     job_queue.run_repeating(
-        fetch_feeds, interval=FEED_UPDATE_INTERVAL, first=10)
+        fetch_feeds, interval=int(os.getenv('FEED_UPDATE_INTERVAL')), first=10)
     updater.start_polling()
     updater.idle()
 
