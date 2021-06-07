@@ -1,7 +1,7 @@
 Telegram bot to fetch RSS feeds
 ===============================
 
-This is a telegram bot that fetches RSS feeds in regular intervals and send it to you. The feed sources can be added or removed by just sending messages to the bot.
+This is a telegram bot that fetches RSS feeds in regular intervals and send it to you. The feed sources can be added or removed by just sending messages to the bot. Additionally, the feed URLs will be captured to archive.org.
 
 Bot setup
 =========
@@ -56,4 +56,4 @@ Bot commands
 * `/remove feedurl` to remove an RSS/Atom feed subscription.
 * `/list` to list alll subscribed feeds.
 * `/help` to get the help
-
+* `/archive` to archive a given link in archive.org
