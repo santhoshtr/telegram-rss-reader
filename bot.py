@@ -11,6 +11,7 @@ from db import (add_feed_source, get_all_sources, get_sources,
                 is_already_present, remove_feed_source,
                 update_source_timestamp)
 from feed import format_feed_item, get_feed_info, read_feed
+from archive import capture
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -56,6 +57,11 @@ def list_feeds(update: Update, context: CallbackContext) -> None:
         context.bot.send_message(
             chat_id=userId, text="No sources added yet")
 
+def archive_link(update: Update, context: CallbackContext):
+    user = update.effective_chat.id
+    source = context.args[0]
+    url, captured = capture(source)
+    context.bot.send_message(chat_id=user, text=url)
 
 def text(update: Update, context: CallbackContext) -> None:
     user = update.effective_chat.id
@@ -107,6 +113,8 @@ def fetch_feeds(context: CallbackContext):
                 context.bot.send_message(chat_id=source["userId"],
                                          text=format_feed_item(entry),
                                          parse_mode=ParseMode.HTML)
+                # Add the link to archive.org
+                capture(entry.link)
             entry_index = entry_index+1
 
         update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
@@ -122,6 +130,8 @@ def main():
     dispatcher.add_handler(CommandHandler('add', add_feed))
     dispatcher.add_handler(CommandHandler('remove', remove_feed))
     dispatcher.add_handler(CommandHandler('list', list_feeds))
+    dispatcher.add_handler(CommandHandler('archive', archive_link))
+
     # add an handler for normal text (not commands)
     dispatcher.add_handler(MessageHandler(Filters.text, text))
     # add an handler for errors
