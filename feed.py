@@ -10,7 +10,7 @@ def read_feed(source):
 
 
 def format_feed_item(post):
-    return "<a href='"+ post.link+ "'>" + post.title + "</a>"
+    return "<a href='"+ post.get("link", "link?")+ "'>" + post.get("title", "title?") + "</a>"
 
 
 def get_feed_info(source):

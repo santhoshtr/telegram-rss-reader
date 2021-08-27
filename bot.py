@@ -95,6 +95,7 @@ def fetch_feeds(context: CallbackContext):
         entry_index = 0
         last_post_updated_time= 0
         for entry in feeds:
+            entry_index = entry_index+1
             if entry_index > 10:
                 break
             if entry.has_key('published_parsed'):
@@ -113,9 +114,10 @@ def fetch_feeds(context: CallbackContext):
                 context.bot.send_message(chat_id=source["userId"],
                                          text=format_feed_item(entry),
                                          parse_mode=ParseMode.HTML)
-                # Add the link to archive.org
-                capture(entry.link)
-            entry_index = entry_index+1
+                if os.getenv('ARCHIVE_POSTS') == 'true':
+                    # Add the link to archive.org
+                    capture(entry.link)
+
 
         update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
 
