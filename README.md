@@ -30,10 +30,17 @@ Create an .env file with the following content
 TELEGRAM_BOT_TOKEN=XXXXXXXXXXX
 FEED_DATABASE=reader.db
 FEED_UPDATE_INTERVAL=1800
+ARCHIVE_POSTS=false
+EXCLUDE_WORDS="കൊന്നു
+കൊലപ്പെടുത്തി"
 ```
 
 Make sure to edit the values as per your environment.
 FEED_UPDATE_INTERVAL is in minutes. So 1800 = 30*60. That is, fetch the feeds in every 30 minutes
+
+EXCLUDE_WORDS are words to filter the feeds. If you don't want to read posts with titles containing these words, add those words here, one per line.
+
+ARCHIVE_POSTS controls whether posts need to be archived in archive.org or not.
 
 Install requirements
 ---------------------

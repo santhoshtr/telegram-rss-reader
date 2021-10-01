@@ -1,10 +1,12 @@
 import feedparser
 from urllib.error import URLError
 
-def read_feed(source):
+def read_feed(source, filter_words):
     try:
         feed = feedparser.parse(source)
-        return feed.entries
+        entries = feed.entries
+        return [entry for entry in entries if
+              all(filter_word not in entry.get("title","") for filter_word in filter_words)]
     except URLError:
         return []
 

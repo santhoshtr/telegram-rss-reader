@@ -88,8 +88,9 @@ def error(update, context):
 
 def fetch_feeds(context: CallbackContext):
     sources = get_all_sources()
+    filter_words = os.getenv('EXCLUDE_WORDS').splitlines()
     for source in sources:
-        feeds = read_feed(source["url"])
+        feeds = read_feed(source["url"], filter_words)
         logger.info(msg="Found " + str(len(feeds)) +
                     " feeds from " + source["url"])
         entry_index = 0
@@ -119,7 +120,7 @@ def fetch_feeds(context: CallbackContext):
                     capture(entry.link)
 
 
-        update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
+        # update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
 
 
 def main():
