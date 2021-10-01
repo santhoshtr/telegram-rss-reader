@@ -120,7 +120,7 @@ def fetch_feeds(context: CallbackContext):
                     capture(entry.link)
 
 
-        # update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
+        update_source_timestamp(source["userId"], source["url"], last_post_updated_time)
 
 
 def main():
