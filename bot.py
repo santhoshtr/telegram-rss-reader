@@ -65,7 +65,6 @@ def archive_link(update: Update, context: CallbackContext):
 
 def text(update: Update, context: CallbackContext) -> None:
     user = update.effective_chat.id
-    text_received = update.message.text
     context.bot.send_message(
         chat_id=user, text='To add a feed use /add feedurl')
 
