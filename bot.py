@@ -81,8 +81,7 @@ async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await context.bot.send_message(chat_id=update.effective_chat.id, text=f'Hello {update.effective_chat.first_name}')
 
 
-def error(update, context: ContextTypes.DEFAULT_TYPE):
-    update.message.reply_text('an error occured')
+async def error_handler(update, context: ContextTypes.DEFAULT_TYPE):
     logger.error(msg="Exception while handling an update:",
                  exc_info=context.error)
 
@@ -113,9 +112,17 @@ async def fetch_feeds(context: ContextTypes.DEFAULT_TYPE):
             if post_updated_time > last_post_updated_time:
                 last_post_updated_time = post_updated_time
             if post_updated_time > last_updated_time:
-                await context.bot.send_message(chat_id=source["userId"],
-                                            text=format_feed_item(entry),
-                                            parse_mode=ParseMode.HTML)
+                news_content = format_feed_item(entry)
+                news_content = format_feed_item(entry)
+                if news_content and news_content != "":
+                    try:
+                        await context.bot.send_message(chat_id=source["userId"],
+                                                        text=news_content,
+                                                        parse_mode=ParseMode.HTML)
+                    except Exception as e:
+                        logger.error(msg="Error sending message to user")
+                        pass
+
                 if os.getenv('ARCHIVE_POSTS') == 'true':
                     # Add the link to archive.org
                     capture(entry.link)
@@ -138,7 +145,7 @@ def main():
     # add an handler for normal text (not commands)
     application.add_handler(MessageHandler(filters.TEXT, text))
     # add an handler for errors
-    application.add_error_handler(error)
+    application.add_error_handler(error_handler)
 
     job_queue = application.job_queue
     job_queue.run_repeating(
